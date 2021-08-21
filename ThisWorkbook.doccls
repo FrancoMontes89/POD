@@ -1,12 +1,21 @@
 ﻿Private Sub Workbook_Open()
 
 On Error Resume Next
-    With ThisWorkbook.Worksheets("SAP")
+    With ThisWorkbook.Worksheets("REF")
         .Visible = True
         .Select
-        .ListObjects("Maestro_materiales").Range.Select
+        .ListObjects("LibretaDirecciones").Range.Select
         Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
         .Visible = False
     End With
-
+    
+On Error Resume Next
+With ThisWorkbook.Worksheets("SAP")
+    .Visible = True
+    .Select
+    .ListObjects("Maestro_materiales").Range.Select
+    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+    .Visible = False
+End With
+    
 End Sub
