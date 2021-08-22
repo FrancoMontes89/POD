@@ -85,6 +85,8 @@ If MsgBox("Está a punto de compartir el POD a los interesados." & vbNewLine & "P
     End
 End If
 
+'Copiado:
+
 ntabla = 1
 
 filatabla = HojaOrigen.Range("A:A").Find(ntabla, LookIn:=xlValues, LookAt:=xlWhole).Row

@@ -3,41 +3,42 @@ Option Explicit
 Public conn As ADODB.Connection
 Public recordset As ADODB.recordset
 
-Sub AbrirDocSharepointDesktopApp()
+Sub CopiarRegistrosList()
 
-Dim DirecciónSharepoint As String
+Dim conn As ADODB.Connection
+Dim rst As ADODB.recordset
+Dim query As String
+Dim Fecha As Date
+Dim Edad As Integer
 
-DirecciónSharepoint = "https://esustentables.sharepoint.com/:x:/s/OyM/EYXkjTgo59pAsw0ohquPyX0BJ9VXJj2jaYlS65jRAv5fFA?e=lr1Pdz"
+Fecha = "15 / 7 / 1992"
+Edad = 29
 
-ActiveWorkbook.FollowHyperlink Address:=DirecciónSharepoint
 
-End Sub
-
-Sub Conexión_Access_Sharepoint()
-
-'On Error GoTo Errores
-Dim host, database, user, pass, query, strcon As String
-'host = ""
-'database = ""
-'user = ""
-'pass = ""
 Set conn = New ADODB.Connection
-'conn.Open "Driver={Microsoft Access Driver (*.mdb)}; Server= & host & ";Database=" & database & ";Uid=" & user & ";Pwd=" & pass & ";""
-'Debug.Print "La conexión se ha realizado correctamente"
-'Exit Sub
+Set rst = New ADODB.recordset
 
-strcon = "Provider=Microsoft.ACE.OLEDB.12.0;" & "Data Source=https://esustentables.sharepoint.com/sites/OyM/Caada%20Honda/02-Documentación general O&M/01-Operación/01-POD/02-Históricos/POD_Cañada Honda.accdb;"
-conn.Open (strcon)
+query = "SELECT * FROM [ListaPrueba];"
 
-query = "SELECT * FROM Table1"
-recordset.Open qry, conn, adOpenKeyset
+With conn
 
-recordset.Close
-conn.Close
+    .ConnectionString = _
+    "Provider=Microsoft.ACE.OLEDB.12.0;WSS;IMEX=0;RetrieveIds=Yes;DATABASE=https://esustentables.sharepoint.com/sites/OyM;LIST={690d4623-1078-473b-8d21-972820ada2b6};"
+    .Open
 
-'Errores:
-'
-'Msgbox Err Description, vbCritical
+End With
 
+rst.Open query, conn, adOpenDynamic, adLockOptimistic
 
+    rst.AddNew
+        rst!ASD = Fecha
+        rst!CVB = Edad
+    rst.Update ' commit changes to SP list
+
+    If CBool(rst.State And adStateOpen) = True Then rst.Close
+    If CBool(conn.State And adStateOpen) = True Then conn.Close
 End Sub
+
+
+
+
